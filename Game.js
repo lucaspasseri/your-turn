@@ -11,6 +11,10 @@ export default class Game {
 		return [...this.#players];
 	}
 
+	get totalTime() {
+		return this.players.reduce((acc, curr) => (acc += curr.timer.curr), 0);
+	}
+
 	addPlayer(name) {
 		if (name === undefined) {
 			name = `Player ${this.numberOfPlayers + 1}`;

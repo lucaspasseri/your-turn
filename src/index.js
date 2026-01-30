@@ -327,6 +327,20 @@ function renderPlayers() {
 	const centerX = width / 2;
 	const centerY = height / 2;
 
+	const totalTimeContainer = document.createElement("div");
+	totalTimeContainer.className =
+		"border-2 border-purple-700 absolute px-2 py-1 text-center";
+
+	const title = document.createElement("p");
+	title.textContent = "Total:";
+
+	const totalTimer = document.createElement("p");
+	totalTimer.textContent = game.totalTime;
+	totalTimer.id = "total-timer";
+
+	totalTimeContainer.append(title, totalTimer);
+	timersContainer.appendChild(totalTimeContainer);
+
 	game.players.forEach((player, index) => {
 		const playerContainer = document.createElement("div");
 		playerContainer.className =
@@ -375,14 +389,15 @@ let timerLoopId = null;
 function startTimerLoop() {
 	if (timerLoopId !== null) return; // prevent duplicates
 
-	console.log({ playerElements });
-
 	function tick() {
 		playerElements.forEach((timerEl, player) => {
 			timerEl.textContent = Math.floor(player.timer.curr / 1000);
 		});
 
-		timerLoopId = setTimeout(tick, 1000);
+		const totalTimer = document.querySelector("#total-timer");
+		totalTimer.textContent = Math.floor(game.totalTime / 1000);
+
+		timerLoopId = setTimeout(tick, 100);
 	}
 
 	tick();
