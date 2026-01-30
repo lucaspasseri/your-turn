@@ -271,31 +271,20 @@
 
 import Game from "../Game.js";
 import { normalize } from "./util/normalize.js";
+import { formatTime } from "./util/formatTime.js";
 
 document.documentElement.setAttribute("data-theme", "light-mode");
 
-/* -----------------------------
-   Game setup
------------------------------ */
 const game = new Game();
 game.addPlayer("Adam");
 game.addPlayer();
 game.addPlayer("Eva");
 
-/* -----------------------------
-   Initialize timers ONCE
------------------------------ */
-// game.players.forEach(player => {
-// 	player.timer.init();
-// });
-
-/* -----------------------------
-   DOM creation
------------------------------ */
 const container = document.querySelector("#content-container");
+// container.className = "flex ";
 
 const main = document.createElement("main");
-main.className = "flex flex-col min-h-[50vh]";
+main.className = "flex flex-col flex-1";
 
 const h1 = document.createElement("h1");
 h1.textContent = "Your Turn";
@@ -303,7 +292,7 @@ h1.textContent = "Your Turn";
 const timersContainer = document.createElement("div");
 timersContainer.id = "timers-container";
 timersContainer.className =
-	"border-4 border-red-700 flex flex-1 relative justify-center items-center";
+	"border-4 border-red-700 flex flex-1 relative sm:justify-center sm:items-center";
 
 main.append(h1, timersContainer);
 container.append(main);
@@ -318,12 +307,13 @@ const playerElements = new Map();
 ----------------------------- */
 function renderPlayers() {
 	timersContainer.innerHTML = "";
+
 	playerElements.clear();
 
 	const { width, height } = timersContainer.getBoundingClientRect();
 	if (!width || !height) return;
 
-	const radius = Math.min(width, height) / 2;
+	const radius = Math.min(width, height) / 3;
 	const centerX = width / 2;
 	const centerY = height / 2;
 
@@ -332,7 +322,7 @@ function renderPlayers() {
 		"border-2 border-purple-700 absolute px-2 py-1 text-center";
 
 	const title = document.createElement("p");
-	title.textContent = "Total:";
+	title.textContent = "Total";
 
 	const totalTimer = document.createElement("p");
 	totalTimer.textContent = game.totalTime;
@@ -349,7 +339,7 @@ function renderPlayers() {
 	game.players.forEach((player, index) => {
 		const playerContainer = document.createElement("div");
 		playerContainer.className =
-			"border-2 border-purple-700 absolute px-2 py-1 text-center";
+			"border-2 border-purple-700 absolute px-2 py-1 text-center min-w-[103px]";
 
 		const name = document.createElement("p");
 		name.textContent = player.name ?? "";
@@ -377,7 +367,7 @@ function renderPlayers() {
 
 		playerContainer.style.left = `${x}px`;
 		playerContainer.style.top = `${y}px`;
-		playerContainer.style.transform = "translate(-50%, -50%)";
+		playerContainer.style.transform = "translate(-80%, -50%)";
 
 		timersContainer.appendChild(playerContainer);
 
@@ -396,11 +386,11 @@ function startTimerLoop() {
 
 	function tick() {
 		playerElements.forEach((timerEl, player) => {
-			timerEl.textContent = Math.floor(player.timer.curr / 1000);
+			timerEl.textContent = formatTime(player.timer.curr);
 		});
 
 		const totalTimer = document.querySelector("#total-timer");
-		totalTimer.textContent = Math.floor(game.totalTime / 1000);
+		totalTimer.textContent = formatTime(game.totalTime);
 
 		timerLoopId = setTimeout(tick, 100);
 	}

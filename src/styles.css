@@ -27,5 +27,5 @@ body {
 }
 
 #content-container {
-	border: 0.3em dashed var(--color);
+	border: 1em solid var(--color);
 }
