@@ -72,4 +72,32 @@ test("if a Game can return the total sum of elapsed time during all players turn
 	expect(game.totalTime).toBe(16000);
 });
 
-test("if a Game can pause the current timer running and play the next timer ", () => {});
+test("if a Game can pause the current timer running and play the next timer ", () => {
+	const game = new Game();
+	game.addPlayer("Adam");
+	game.addPlayer("Eva");
+	game.addPlayer();
+
+	game.players.forEach(player => {
+		expect(player.timer.isRunning).toBe(false);
+	});
+
+	const adam = game.players[0];
+	adam.timer.init();
+	expect(adam.timer.isRunning).toBe(true);
+
+	game.toggle();
+	expect(adam.timer.isRunning).toBe(false);
+	const eva = game.players[1];
+	expect(eva.timer.isRunning).toBe(true);
+
+	game.toggle();
+	expect(eva.timer.isRunning).toBe(false);
+	const anotherPlayer = game.players[2];
+	expect(anotherPlayer.timer.isRunning).toBe(true);
+
+	game.toggle();
+
+	expect(anotherPlayer.timer.isRunning).toBe(false);
+	expect(adam.timer.isRunning).toBe(true);
+});

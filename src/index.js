@@ -338,7 +338,12 @@ function renderPlayers() {
 	totalTimer.textContent = game.totalTime;
 	totalTimer.id = "total-timer";
 
-	totalTimeContainer.append(title, totalTimer);
+	const togglePlayerButton = document.createElement("button");
+	togglePlayerButton.className = "bg-purple-600";
+	togglePlayerButton.textContent = "Toggle";
+	togglePlayerButton.addEventListener("click", () => game.toggle());
+
+	totalTimeContainer.append(title, totalTimer, togglePlayerButton);
 	timersContainer.appendChild(totalTimeContainer);
 
 	game.players.forEach((player, index) => {
